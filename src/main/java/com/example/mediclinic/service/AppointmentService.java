@@ -5,7 +5,6 @@ import com.example.mediclinic.repository.AppointmentRepository;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.Optional;
 
 @Service
 public class AppointmentService {
@@ -23,17 +22,17 @@ public class AppointmentService {
 
     // Update an existing Appointment
     public Appointment update(Long id, Appointment appointment) {
-        Optional<Appointment> existingAppointment = appointmentRepository.findById(id);
-        if (existingAppointment.isPresent()) {
-            Appointment updatedAppointment = existingAppointment.get();
-            updatedAppointment.setPatient(appointment.getPatient());
-            updatedAppointment.setDoctor(appointment.getDoctor());
-            updatedAppointment.setDate(appointment.getDate());
-            updatedAppointment.setTime(appointment.getTime());
-            return appointmentRepository.save(updatedAppointment);
-        }
-        throw new RuntimeException("Appointment not found with ID: " + id);
+        return appointmentRepository.findById(id)
+                .map(existingAppointment -> {
+                    existingAppointment.setPatient(appointment.getPatient());
+                    existingAppointment.setDoctor(appointment.getDoctor());
+                    existingAppointment.setDate(appointment.getDate());
+                    existingAppointment.setTime(appointment.getTime());
+                    return appointmentRepository.save(existingAppointment);
+                })
+                .orElseThrow(() -> new RuntimeException("Appointment not found with ID: " + id));
     }
+
 
     // Delete an Appointment
     public void delete(Long id) {
