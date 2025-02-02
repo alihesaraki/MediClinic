@@ -2,9 +2,11 @@ package com.example.mediclinic.repository;
 
 import com.example.mediclinic.model.Role;
 import org.springframework.data.jpa.repository.JpaRepository;
-import org.springframework.stereotype.Repository;
 
-@Repository
+import java.util.Optional;
+
 public interface RoleRepository extends JpaRepository<Role, Long> {
-    Role findByName(String name);
+
+    // Find Role by name
+    Optional<Role> findByName(String name);
 }

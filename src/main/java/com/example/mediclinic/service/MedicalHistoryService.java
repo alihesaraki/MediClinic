@@ -1,6 +1,5 @@
 package com.example.mediclinic.service;
 
-import com.example.mediclinic.exception.ResourceNotFoundException;
 import com.example.mediclinic.model.MedicalHistory;
 import com.example.mediclinic.repository.MedicalHistoryRepository;
 import org.springframework.stereotype.Service;
@@ -17,38 +16,38 @@ public class MedicalHistoryService {
         this.medicalHistoryRepository = medicalHistoryRepository;
     }
 
+    // Save or Update Medical History
     public MedicalHistory save(MedicalHistory medicalHistory) {
         return medicalHistoryRepository.save(medicalHistory);
     }
 
+    // Update Medical History by ID
     public MedicalHistory update(Long id, MedicalHistory medicalHistory) {
-        Optional<MedicalHistory> existingMedicalHistory = medicalHistoryRepository.findById(id);
-
-        if (existingMedicalHistory.isPresent()) {
-            MedicalHistory updatedMedicalHistory = existingMedicalHistory.get();
-            updatedMedicalHistory.setPatient(medicalHistory.getPatient());
-
-            return medicalHistoryRepository.save(updatedMedicalHistory);
-        } else {
-            throw new ResourceNotFoundException("Medical History with id " + id + " not found.");
+        Optional<MedicalHistory> existingHistory = medicalHistoryRepository.findById(id);
+        if (existingHistory.isPresent()) {
+            MedicalHistory updatedHistory = existingHistory.get();
+            updatedHistory.setPatient(medicalHistory.getPatient());
+            updatedHistory.setDiagnosis(medicalHistory.getDiagnosis());
+            updatedHistory.setTreatment(medicalHistory.getTreatment());
+            updatedHistory.setDate(medicalHistory.getDate());
+            return medicalHistoryRepository.save(updatedHistory);
         }
+        throw new RuntimeException("Medical History not found with ID: " + id);
     }
 
+    // Delete Medical History
     public void delete(Long id) {
-        Optional<MedicalHistory> existingMedicalHistory = medicalHistoryRepository.findById(id);
-        if (existingMedicalHistory.isPresent()) {
-            medicalHistoryRepository.deleteById(id);
-        } else {
-            throw new ResourceNotFoundException("Medical History with id " + id + " not found.");
-        }
+        medicalHistoryRepository.deleteById(id);
     }
 
+    // Get All Medical Histories
     public List<MedicalHistory> findAll() {
         return medicalHistoryRepository.findAll();
     }
 
+    // Get Medical History by ID
     public MedicalHistory findById(Long id) {
         return medicalHistoryRepository.findById(id)
-                .orElseThrow(() -> new ResourceNotFoundException("Medical History with id " + id + " not found."));
+                .orElseThrow(() -> new RuntimeException("Medical History not found with ID: " + id));
     }
 }

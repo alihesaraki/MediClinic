@@ -2,6 +2,7 @@ package com.example.mediclinic.model;
 
 import lombok.*;
 import jakarta.persistence.*;
+import java.time.LocalDateTime;
 
 @Entity
 @Getter
@@ -10,19 +11,24 @@ import jakarta.persistence.*;
 @AllArgsConstructor
 @ToString
 @Builder
+@Table(name = "prescriptions")
 public class Prescription {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    private String medicationDetails;
-
     @ManyToOne
-    @JoinColumn(name = "doctor_id")
-    private Doctor doctor;
-
-    @ManyToOne
-    @JoinColumn(name = "patient_id")
+    @JoinColumn(name = "patient_id", nullable = false)
     private Patient patient;
+
+    @ManyToOne
+    @JoinColumn(name = "medicine_id", nullable = false)
+    private Medicine medicine;
+
+    @Column(name = "dosage", nullable = false)
+    private String dosage;
+
+    @Column(name = "date_issued", nullable = false)
+    private LocalDateTime dateIssued;
 }

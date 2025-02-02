@@ -1,6 +1,5 @@
 package com.example.mediclinic.service;
 
-import com.example.mediclinic.exception.ResourceNotFoundException;
 import com.example.mediclinic.model.Specialization;
 import com.example.mediclinic.repository.SpecializationRepository;
 import org.springframework.stereotype.Service;
@@ -17,47 +16,39 @@ public class SpecializationService {
         this.specializationRepository = specializationRepository;
     }
 
-    // Save
+    // Save or update specialization
     public Specialization save(Specialization specialization) {
         return specializationRepository.save(specialization);
     }
 
-    // Update
+    // Update an existing specialization
     public Specialization update(Specialization specialization) {
-        // ابتدا بررسی می‌کنیم که Specialization با این id وجود دارد یا خیر
         Optional<Specialization> existingSpecialization = specializationRepository.findById(specialization.getId());
-
-        // اگر موجود باشد، آن را آپدیت می‌کنیم
         if (existingSpecialization.isPresent()) {
-            Specialization updatedSpecialization = existingSpecialization.get();
-            updatedSpecialization.setName(specialization.getName());  // فرض کنید فیلد name را آپدیت می‌کنید
-            // سایر فیلدها را هم به همین ترتیب آپدیت کنید
-
-            // ذخیره‌سازی تغییرات
-            return specializationRepository.save(updatedSpecialization);
-        } else {
-            // اگر موجود نباشد، می‌توانید خطای مناسب را پرتاب کنید
-            throw new ResourceNotFoundException("Specialization with id " + specialization.getId() + " not found.");
+            return specializationRepository.save(specialization);
         }
+        throw new RuntimeException("Specialization not found with ID: " + specialization.getId());
     }
 
-    // Delete
+    // Delete specialization by ID
     public void delete(Long id) {
         specializationRepository.deleteById(id);
     }
 
-    // FindAll
+    // Get all specializations
     public List<Specialization> findAll() {
         return specializationRepository.findAll();
     }
 
-    // FindById
+    // Get specialization by ID
     public Specialization findById(Long id) {
-        return specializationRepository.findById(id).orElse(null);
+        return specializationRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Specialization not found with ID: " + id));
     }
 
-    // FindByName
+    // Get specialization by Name
     public Specialization findByName(String name) {
-        return specializationRepository.findByName(name);
+        return specializationRepository.findByName(name)
+                .orElseThrow(() -> new RuntimeException("Specialization not found with name: " + name));
     }
 }

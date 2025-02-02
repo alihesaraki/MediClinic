@@ -1,11 +1,11 @@
 package com.example.mediclinic.service;
 
-import com.example.mediclinic.exception.ResourceNotFoundException;
 import com.example.mediclinic.model.User;
 import com.example.mediclinic.repository.UserRepository;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class UserService {
@@ -16,48 +16,46 @@ public class UserService {
         this.userRepository = userRepository;
     }
 
-    // Save
+    // Save or update user
     public User save(User user) {
         return userRepository.save(user);
     }
 
-    // Update
+    // Update an existing user
     public User update(Long id, User user) {
-        if (!userRepository.existsById(id)) {
-            throw new ResourceNotFoundException("User not found with id: " + id);
+        Optional<User> existingUser = userRepository.findById(id);
+        if (existingUser.isPresent()) {
+            user.setId(id);  // Ensuring the ID is passed for update
+            return userRepository.save(user);
         }
-        user.setId(id); // ensure the existing user is updated
-        return userRepository.save(user);
+        throw new RuntimeException("User not found with ID: " + id);
     }
 
-    // Delete
+    // Delete user by ID
     public void delete(Long id) {
-        if (!userRepository.existsById(id)) {
-            throw new ResourceNotFoundException("User not found with id: " + id);
-        }
         userRepository.deleteById(id);
     }
 
-    // FindAll
+    // Get all users
     public List<User> findAll() {
         return userRepository.findAll();
     }
 
-    // FindById
+    // Get user by ID
     public User findById(Long id) {
         return userRepository.findById(id)
-                .orElseThrow(() -> new ResourceNotFoundException("User not found with id: " + id));
+                .orElseThrow(() -> new RuntimeException("User not found with ID: " + id));
     }
 
-    // FindByUsername
+    // Get user by Username
     public User findByUsername(String username) {
         return userRepository.findByUsername(username)
-                .orElseThrow(() -> new ResourceNotFoundException("User not found with username: " + username));
+                .orElseThrow(() -> new RuntimeException("User not found with Username: " + username));
     }
 
-    // FindByEmail
+    // Get user by Email
     public User findByEmail(String email) {
         return userRepository.findByEmail(email)
-                .orElseThrow(() -> new ResourceNotFoundException("User not found with email: " + email));
+                .orElseThrow(() -> new RuntimeException("User not found with Email: " + email));
     }
 }

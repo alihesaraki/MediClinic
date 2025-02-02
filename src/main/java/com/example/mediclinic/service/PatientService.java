@@ -1,6 +1,5 @@
 package com.example.mediclinic.service;
 
-import com.example.mediclinic.exception.ResourceNotFoundException;
 import com.example.mediclinic.model.Patient;
 import com.example.mediclinic.repository.PatientRepository;
 import org.springframework.stereotype.Service;
@@ -17,39 +16,38 @@ public class PatientService {
         this.patientRepository = patientRepository;
     }
 
-    // Save
+    // Save or Update Patient
     public Patient save(Patient patient) {
         return patientRepository.save(patient);
     }
 
-    // Update
+    // Update Patient
     public Patient update(Patient patient) {
-
         Optional<Patient> existingPatient = patientRepository.findById(patient.getId());
-
         if (existingPatient.isPresent()) {
             Patient updatedPatient = existingPatient.get();
             updatedPatient.setName(patient.getName());
-
+            updatedPatient.setAge(patient.getAge());
+            updatedPatient.setMedicalHistory(patient.getMedicalHistory());
+            updatedPatient.setPhone(patient.getPhone());
             return patientRepository.save(updatedPatient);
-        } else {
-            // اگر موجود نباشد، می‌توانید خطای مناسب را پرتاب کنید
-            throw new ResourceNotFoundException("Patient with id " + patient.getId() + " not found.");
         }
+        throw new RuntimeException("Patient not found with ID: " + patient.getId());
     }
 
-    // Delete
+    // Delete Patient by ID
     public void delete(Long id) {
         patientRepository.deleteById(id);
     }
 
-    // FindAll
+    // Get All Patients
     public List<Patient> findAll() {
         return patientRepository.findAll();
     }
 
-    // FindById
+    // Get Patient by ID
     public Patient findById(Long id) {
-        return patientRepository.findById(id).orElse(null);
+        return patientRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Patient not found with ID: " + id));
     }
 }

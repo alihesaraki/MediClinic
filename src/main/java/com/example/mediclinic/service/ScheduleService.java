@@ -1,6 +1,5 @@
 package com.example.mediclinic.service;
 
-import com.example.mediclinic.exception.ResourceNotFoundException;
 import com.example.mediclinic.model.Schedule;
 import com.example.mediclinic.repository.ScheduleRepository;
 import org.springframework.stereotype.Service;
@@ -17,43 +16,36 @@ public class ScheduleService {
         this.scheduleRepository = scheduleRepository;
     }
 
-    // Save
+    // Save a new schedule or update an existing one
     public Schedule save(Schedule schedule) {
         return scheduleRepository.save(schedule);
     }
 
-    // Update
+    // Update an existing schedule by ID
     public Schedule update(Long id, Schedule schedule) {
         Optional<Schedule> existingSchedule = scheduleRepository.findById(id);
-
         if (existingSchedule.isPresent()) {
             Schedule updatedSchedule = existingSchedule.get();
-
-            // به‌روزرسانی فیلدهای مورد نظر
-            updatedSchedule.setDoctor(schedule.getDoctor());
-
+            updatedSchedule.setDate(schedule.getDate());  // Update any other fields here
+            updatedSchedule.setDoctor(schedule.getDoctor());  // Example of updating another field
             return scheduleRepository.save(updatedSchedule);
-        } else {
-            throw new ResourceNotFoundException("Schedule with id " + id + " not found.");
         }
+        throw new RuntimeException("Schedule not found with ID: " + id);
     }
 
-    // Delete
+    // Delete schedule by ID
     public void delete(Long id) {
-        if (!scheduleRepository.existsById(id)) {
-            throw new ResourceNotFoundException("Schedule with id " + id + " not found.");
-        }
         scheduleRepository.deleteById(id);
     }
 
-    // FindAll
+    // Get all schedules
     public List<Schedule> findAll() {
         return scheduleRepository.findAll();
     }
 
-    // FindById
+    // Get schedule by ID
     public Schedule findById(Long id) {
         return scheduleRepository.findById(id)
-                .orElseThrow(() -> new ResourceNotFoundException("Schedule with id " + id + " not found."));
+                .orElseThrow(() -> new RuntimeException("Schedule not found with ID: " + id));
     }
 }

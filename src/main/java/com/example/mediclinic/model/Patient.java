@@ -10,16 +10,22 @@ import jakarta.persistence.*;
 @AllArgsConstructor
 @ToString
 @Builder
+@Table(name = "patients")
 public class Patient {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @Column(name = "name", nullable = false)
     private String name;
-    private String phoneNumber;
 
-    @ManyToOne
-    @JoinColumn(name = "user_id")
-    private User user; // ارتباط با User برای بیماران
+    @Column(name = "age", nullable = false)
+    private Integer age;
+
+    @Column(name = "medical_history")
+    private String medicalHistory;
+
+    @Column(name = "phone")
+    private String phone;
 }

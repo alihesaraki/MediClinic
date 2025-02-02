@@ -1,6 +1,5 @@
 package com.example.mediclinic.service;
 
-import com.example.mediclinic.exception.ResourceNotFoundException;
 import com.example.mediclinic.model.Medicine;
 import com.example.mediclinic.repository.MedicineRepository;
 import org.springframework.stereotype.Service;
@@ -17,39 +16,38 @@ public class MedicineService {
         this.medicineRepository = medicineRepository;
     }
 
+    // Save or Update Medicine
     public Medicine save(Medicine medicine) {
         return medicineRepository.save(medicine);
     }
 
+    // Update Medicine by ID
     public Medicine update(Long id, Medicine medicine) {
         Optional<Medicine> existingMedicine = medicineRepository.findById(id);
-
         if (existingMedicine.isPresent()) {
             Medicine updatedMedicine = existingMedicine.get();
             updatedMedicine.setName(medicine.getName());
             updatedMedicine.setDescription(medicine.getDescription());
-
+            updatedMedicine.setPrice(medicine.getPrice());
+            updatedMedicine.setStock(medicine.getStock());
             return medicineRepository.save(updatedMedicine);
-        } else {
-            throw new ResourceNotFoundException("Medicine with id " + id + " not found.");
         }
+        throw new RuntimeException("Medicine not found with ID: " + id);
     }
 
+    // Delete Medicine by ID
     public void delete(Long id) {
-        Optional<Medicine> existingMedicine = medicineRepository.findById(id);
-        if (existingMedicine.isPresent()) {
-            medicineRepository.deleteById(id);
-        } else {
-            throw new ResourceNotFoundException("Medicine with id " + id + " not found.");
-        }
+        medicineRepository.deleteById(id);
     }
 
+    // Get All Medicines
     public List<Medicine> findAll() {
         return medicineRepository.findAll();
     }
 
+    // Get Medicine by ID
     public Medicine findById(Long id) {
         return medicineRepository.findById(id)
-                .orElseThrow(() -> new ResourceNotFoundException("Medicine with id " + id + " not found."));
+                .orElseThrow(() -> new RuntimeException("Medicine not found with ID: " + id));
     }
 }

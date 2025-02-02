@@ -3,8 +3,6 @@ package com.example.mediclinic.model;
 import lombok.*;
 import jakarta.persistence.*;
 
-import java.util.Set;
-
 @Entity
 @Getter
 @Setter
@@ -12,15 +10,22 @@ import java.util.Set;
 @AllArgsConstructor
 @ToString
 @Builder
+@Table(name = "medicines")
 public class Medicine {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @Column(name = "name", nullable = false)
     private String name;
+
+    @Column(name = "description")
     private String description;
 
-    @ManyToMany(mappedBy = "medicines")
-    private Set<Prescription> prescriptions;
+    @Column(name = "price", nullable = false)
+    private Double price;
+
+    @Column(name = "stock", nullable = false)
+    private Integer stock;
 }

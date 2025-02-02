@@ -1,6 +1,5 @@
 package com.example.mediclinic.service;
 
-import com.example.mediclinic.exception.ResourceNotFoundException;
 import com.example.mediclinic.model.Appointment;
 import com.example.mediclinic.repository.AppointmentRepository;
 import org.springframework.stereotype.Service;
@@ -17,59 +16,47 @@ public class AppointmentService {
         this.appointmentRepository = appointmentRepository;
     }
 
-    // Save
+    // Save a new Appointment
     public Appointment save(Appointment appointment) {
         return appointmentRepository.save(appointment);
     }
 
-    // Update
+    // Update an existing Appointment
     public Appointment update(Long id, Appointment appointment) {
-        // ابتدا بررسی می‌کنیم که Appointment با این id وجود دارد یا خیر
         Optional<Appointment> existingAppointment = appointmentRepository.findById(id);
-
-        // اگر موجود باشد، آن را آپدیت می‌کنیم
         if (existingAppointment.isPresent()) {
             Appointment updatedAppointment = existingAppointment.get();
-            // فرض کنید که می‌خواهید فیلدهای خاصی را آپدیت کنید
-            updatedAppointment.setDoctor(appointment.getDoctor());
             updatedAppointment.setPatient(appointment.getPatient());
-
-            // ذخیره‌سازی تغییرات
+            updatedAppointment.setDoctor(appointment.getDoctor());
+            updatedAppointment.setDate(appointment.getDate());
+            updatedAppointment.setTime(appointment.getTime());
             return appointmentRepository.save(updatedAppointment);
-        } else {
-            // اگر موجود نباشد، می‌توانید خطای مناسب را پرتاب کنید
-            throw new ResourceNotFoundException("Appointment with id " + id + " not found.");
         }
+        throw new RuntimeException("Appointment not found with ID: " + id);
     }
 
-    // Delete
+    // Delete an Appointment
     public void delete(Long id) {
-        // ابتدا بررسی می‌کنیم که Appointment با این id وجود دارد یا خیر
-        Optional<Appointment> existingAppointment = appointmentRepository.findById(id);
-        if (existingAppointment.isPresent()) {
-            appointmentRepository.deleteById(id);
-        } else {
-            throw new ResourceNotFoundException("Appointment with id " + id + " not found.");
-        }
+        appointmentRepository.deleteById(id);
     }
 
-    // FindAll
+    // Get all Appointments
     public List<Appointment> findAll() {
         return appointmentRepository.findAll();
     }
 
-    // FindById
+    // Get Appointment by ID
     public Appointment findById(Long id) {
         return appointmentRepository.findById(id)
-                .orElseThrow(() -> new ResourceNotFoundException("Appointment with id " + id + " not found."));
+                .orElseThrow(() -> new RuntimeException("Appointment not found with ID: " + id));
     }
 
-    // FindByPatientId
+    // Get Appointments by Patient ID
     public List<Appointment> findByPatientId(Long patientId) {
         return appointmentRepository.findByPatientId(patientId);
     }
 
-    // FindByDoctorId
+    // Get Appointments by Doctor ID
     public List<Appointment> findByDoctorId(Long doctorId) {
         return appointmentRepository.findByDoctorId(doctorId);
     }

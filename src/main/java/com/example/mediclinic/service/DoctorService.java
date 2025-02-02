@@ -1,6 +1,5 @@
 package com.example.mediclinic.service;
 
-import com.example.mediclinic.exception.ResourceNotFoundException;
 import com.example.mediclinic.model.Doctor;
 import com.example.mediclinic.repository.DoctorRepository;
 import org.springframework.stereotype.Service;
@@ -17,42 +16,42 @@ public class DoctorService {
         this.doctorRepository = doctorRepository;
     }
 
-    // Save
+    // Save or Update Doctor
     public Doctor save(Doctor doctor) {
         return doctorRepository.save(doctor);
     }
 
-    // Update
+    // Update Doctor by ID
     public Doctor update(Long id, Doctor doctor) {
         Optional<Doctor> existingDoctor = doctorRepository.findById(id);
-
         if (existingDoctor.isPresent()) {
             Doctor updatedDoctor = existingDoctor.get();
-            updatedDoctor.setName(doctor.getName()); // Assume 'name' is a field to update
-            updatedDoctor.setSpecialization(doctor.getSpecialization()); // Example for specialization field update
-
+            updatedDoctor.setName(doctor.getName());
+            updatedDoctor.setSpecialization(doctor.getSpecialization());
+            updatedDoctor.setExperienceYears(doctor.getExperienceYears());
+            updatedDoctor.setContactInfo(doctor.getContactInfo());
             return doctorRepository.save(updatedDoctor);
-        } else {
-            throw new ResourceNotFoundException("Doctor with id " + id + " not found.");
         }
+        throw new RuntimeException("Doctor not found with ID: " + id);
     }
 
-    // Delete
+    // Delete Doctor
     public void delete(Long id) {
         doctorRepository.deleteById(id);
     }
 
-    // FindAll
+    // Get All Doctors
     public List<Doctor> findAll() {
         return doctorRepository.findAll();
     }
 
-    // FindById
+    // Get Doctor by ID
     public Doctor findById(Long id) {
-        return doctorRepository.findById(id).orElse(null);
+        return doctorRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Doctor not found with ID: " + id));
     }
 
-    // FindBySpecializationId
+    // Get Doctors by Specialization ID
     public List<Doctor> findBySpecializationId(Long specializationId) {
         return doctorRepository.findBySpecializationId(specializationId);
     }

@@ -1,7 +1,7 @@
 package com.example.mediclinic.model;
 
-import jakarta.persistence.*;
 import lombok.*;
+import jakarta.persistence.*;
 
 @Entity
 @Getter
@@ -10,20 +10,23 @@ import lombok.*;
 @AllArgsConstructor
 @ToString
 @Builder
+@Table(name = "doctors")
 public class Doctor {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @Column(name = "name", nullable = false)
     private String name;
-    private String medicalLicenseNumber; // شماره نظام پزشکی
 
     @ManyToOne
-    @JoinColumn(name = "specialization_id")
+    @JoinColumn(name = "specialization_id", nullable = false)
     private Specialization specialization;
 
-    @ManyToOne
-    @JoinColumn(name = "user_id")
-    private User user; // ارتباط با User برای پزشکان
+    @Column(name = "experience_years", nullable = false)
+    private int experienceYears;
+
+    @Column(name = "contact_info", nullable = false)
+    private String contactInfo;
 }

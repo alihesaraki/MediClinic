@@ -1,6 +1,5 @@
 package com.example.mediclinic.service;
 
-import com.example.mediclinic.exception.ResourceNotFoundException;
 import com.example.mediclinic.model.Prescription;
 import com.example.mediclinic.repository.PrescriptionRepository;
 import org.springframework.stereotype.Service;
@@ -17,39 +16,38 @@ public class PrescriptionService {
         this.prescriptionRepository = prescriptionRepository;
     }
 
-    // Save
+    // Save a new Prescription or Update an existing one
     public Prescription save(Prescription prescription) {
         return prescriptionRepository.save(prescription);
     }
 
-    // Update
+    // Update an existing Prescription
     public Prescription update(Prescription prescription) {
-        // ابتدا بررسی می‌کنیم که Prescription با این id وجود دارد یا خیر
         Optional<Prescription> existingPrescription = prescriptionRepository.findById(prescription.getId());
-
-        // اگر موجود باشد، آن را آپدیت می‌کنیم
         if (existingPrescription.isPresent()) {
             Prescription updatedPrescription = existingPrescription.get();
-            // ذخیره‌سازی تغییرات
+            updatedPrescription.setMedicine(prescription.getMedicine());
+            updatedPrescription.setDosage(prescription.getDosage());
+            updatedPrescription.setPatient(prescription.getPatient());
+            updatedPrescription.setDateIssued(prescription.getDateIssued());
             return prescriptionRepository.save(updatedPrescription);
-        } else {
-            // اگر موجود نباشد، می‌توانید خطای مناسب را پرتاب کنید
-            throw new ResourceNotFoundException("Prescription with id " + prescription.getId() + " not found.");
         }
+        throw new RuntimeException("Prescription not found with ID: " + prescription.getId());
     }
 
-    // Delete
+    // Delete Prescription by ID
     public void delete(Long id) {
         prescriptionRepository.deleteById(id);
     }
 
-    // FindAll
+    // Get all Prescriptions
     public List<Prescription> findAll() {
         return prescriptionRepository.findAll();
     }
 
-    // FindById
+    // Get Prescription by ID
     public Prescription findById(Long id) {
-        return prescriptionRepository.findById(id).orElse(null);
+        return prescriptionRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Prescription not found with ID: " + id));
     }
 }

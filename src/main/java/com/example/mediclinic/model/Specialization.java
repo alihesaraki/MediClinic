@@ -1,8 +1,7 @@
 package com.example.mediclinic.model;
 
-import lombok.*;
 import jakarta.persistence.*;
-import java.util.Set;
+import lombok.*;
 
 @Entity
 @Getter
@@ -11,14 +10,16 @@ import java.util.Set;
 @AllArgsConstructor
 @ToString
 @Builder
+@Table(name = "specializations")
 public class Specialization {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    private String name; // قلب، مغز و اعصاب، ارتوپدی
+    @Column(name = "name", nullable = false, unique = true)
+    private String name;
 
-    @OneToMany(mappedBy = "specialization")
-    private Set<Doctor> doctors;
+    @Column(name = "description")
+    private String description;
 }

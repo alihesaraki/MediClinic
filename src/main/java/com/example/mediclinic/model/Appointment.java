@@ -11,19 +11,24 @@ import java.time.LocalDateTime;
 @AllArgsConstructor
 @ToString
 @Builder
+@Table(name = "appointments")
 public class Appointment {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    private LocalDateTime appointmentDate;
-
     @ManyToOne
-    @JoinColumn(name = "patient_id")
+    @JoinColumn(name = "patient_id", nullable = false)
     private Patient patient;
 
     @ManyToOne
-    @JoinColumn(name = "doctor_id")
+    @JoinColumn(name = "doctor_id", nullable = false)
     private Doctor doctor;
+
+    @Column(name = "appointment_date", nullable = false)
+    private LocalDateTime date;
+
+    @Column(name = "appointment_time", nullable = false)
+    private String time;
 }
