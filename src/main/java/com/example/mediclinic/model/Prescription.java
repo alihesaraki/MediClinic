@@ -4,9 +4,12 @@ import lombok.*;
 import jakarta.persistence.*;
 
 @Entity
-@Data
+@Getter
+@Setter
 @NoArgsConstructor
 @AllArgsConstructor
+@ToString
+@Builder
 public class Prescription {
 
     @Id

@@ -5,9 +5,12 @@ import jakarta.persistence.*;
 import java.util.Set;
 
 @Entity
-@Data
+@Getter
+@Setter
 @NoArgsConstructor
 @AllArgsConstructor
+@ToString
+@Builder
 public class Specialization {
 
     @Id
