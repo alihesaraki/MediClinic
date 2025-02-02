@@ -23,23 +23,26 @@ public class ScheduleService {
     }
 
     // Update
-    public Schedule update(Schedule schedule) {
-        // ابتدا بررسی می‌کنیم که Schedule با این id وجود دارد یا خیر
-        Optional<Schedule> existingSchedule = scheduleRepository.findById(schedule.getId());
+    public Schedule update(Long id, Schedule schedule) {
+        Optional<Schedule> existingSchedule = scheduleRepository.findById(id);
 
-        // اگر موجود باشد، آن را آپدیت می‌کنیم
         if (existingSchedule.isPresent()) {
             Schedule updatedSchedule = existingSchedule.get();
-            // ذخیره‌سازی تغییرات
+
+            // به‌روزرسانی فیلدهای مورد نظر
+            updatedSchedule.setDoctor(schedule.getDoctor());
+
             return scheduleRepository.save(updatedSchedule);
         } else {
-            // اگر موجود نباشد، می‌توانید خطای مناسب را پرتاب کنید
-            throw new ResourceNotFoundException("Schedule with id " + schedule.getId() + " not found.");
+            throw new ResourceNotFoundException("Schedule with id " + id + " not found.");
         }
     }
 
     // Delete
     public void delete(Long id) {
+        if (!scheduleRepository.existsById(id)) {
+            throw new ResourceNotFoundException("Schedule with id " + id + " not found.");
+        }
         scheduleRepository.deleteById(id);
     }
 
@@ -50,6 +53,7 @@ public class ScheduleService {
 
     // FindById
     public Schedule findById(Long id) {
-        return scheduleRepository.findById(id).orElse(null);
+        return scheduleRepository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("Schedule with id " + id + " not found."));
     }
 }
