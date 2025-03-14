@@ -36,7 +36,7 @@ public class User {
     @Column(name = "last_name")
     private String lastName;
 
-    @ManyToMany
+    @ManyToMany(fetch = FetchType.EAGER)
     private Set<Role> roleSet;
 
     @Column(name = "accountNonExpired")
