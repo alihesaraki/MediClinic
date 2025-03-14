@@ -2,6 +2,7 @@ package com.example.mediclinic.service;
 
 import com.example.mediclinic.model.Patient;
 import com.example.mediclinic.repository.PatientRepository;
+import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -50,4 +51,9 @@ public class PatientService {
         return patientRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Patient not found with ID: " + id));
     }
+
+    public List<Patient>findByLastName(String lastName){
+        return patientRepository.findByLastName(lastName);
+    }
+
 }

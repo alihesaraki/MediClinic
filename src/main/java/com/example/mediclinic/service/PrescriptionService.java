@@ -26,10 +26,10 @@ public class PrescriptionService {
         Optional<Prescription> existingPrescription = prescriptionRepository.findById(prescription.getId());
         if (existingPrescription.isPresent()) {
             Prescription updatedPrescription = existingPrescription.get();
-            updatedPrescription.setMedicine(prescription.getMedicine());
+//            updatedPrescription.setMedicine(prescription.getMedicine());
             updatedPrescription.setDosage(prescription.getDosage());
-            updatedPrescription.setPatient(prescription.getPatient());
-            updatedPrescription.setDateIssued(prescription.getDateIssued());
+//            updatedPrescription.setPatient(prescription.getPatient());
+            updatedPrescription.setDateTimeIssued(prescription.getDateTimeIssued());
             return prescriptionRepository.save(updatedPrescription);
         }
         throw new RuntimeException("Prescription not found with ID: " + prescription.getId());
