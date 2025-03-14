@@ -18,21 +18,21 @@ public class Prescription {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @ManyToOne
-    @JoinColumn(name = "patient_id", nullable = false)
-    private Patient patient;
+//    @ManyToOne
+//    @JoinColumn(name = "patient_id", nullable = false)
+//    private Patient patient;
 
-    @ManyToOne
-    @JoinColumn(name = "medicine_id", nullable = false)
-    private Medicine medicine;
+//    @ManyToOne
+//    @JoinColumn(name = "medicine_id", nullable = false)
+//    private Medicine medicine;
 
     @Column(name = "dosage", nullable = false)
     private String dosage;
 
     @Column(name = "date_issued", nullable = false)
-    private LocalDateTime dateIssued;
+    private LocalDateTime dateTimeIssued;
 
-    @ManyToOne
-    @JoinColumn(name = "medical_id")
-    private MedicalHistory medicalHistory;
+//    @ManyToOne
+//    @JoinColumn(name = "medical_id")
+//    private MedicalHistory medicalHistory;
 }

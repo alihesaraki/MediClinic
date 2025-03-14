@@ -53,4 +53,10 @@ public class PatientController {
         Patient patient = patientService.findById(id);
         return patient != null ? ResponseEntity.ok(patient) : ResponseEntity.notFound().build();
     }
+
+    @GetMapping("/lastName/{lastName}")
+    public ResponseEntity<Patient> getPatientByLastName(@PathVariable String lastName) {
+       List<Patient> patients = patientService.findByLastName(lastName);
+        return patients != null ? ResponseEntity.ok(patients.get(0)) : ResponseEntity.notFound().build();
+    }
 }
