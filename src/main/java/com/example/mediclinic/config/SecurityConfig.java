@@ -12,6 +12,7 @@ import org.springframework.security.config.annotation.authentication.configurati
 import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
+import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -54,13 +55,13 @@ public class SecurityConfig {
         boolean isDevProfile = Arrays.asList(environment.getActiveProfiles()).contains("dev");
 
         http
-                // 1. CORS Configuration
-                .cors(cors -> cors.configurationSource(corsConfigurationSource()))
+//                 1. CORS Configuration
+//                .cors(cors -> cors.configurationSource(corsConfigurationSource()))
 
                 // 2. CSRF Protection
-                .csrf(csrf -> csrf
-                        .csrfTokenRepository(CookieCsrfTokenRepository.withHttpOnlyFalse())
-                        .ignoringRequestMatchers("/public/**")
+                .csrf(AbstractHttpConfigurer::disable
+//                        .csrfTokenRepository(CookieCsrfTokenRepository.withHttpOnlyFalse())
+//                        .ignoringRequestMatchers("/public/**")
                 )
 
                 // 3. Headers (XSS & Clickjacking)
@@ -93,7 +94,7 @@ public class SecurityConfig {
 
                 // 5. Authorization Rules
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers("/login","/css/**", "/h2-console/**", "/public/**", "/api/test/public/**").permitAll()
+                        .requestMatchers("/login","/css/**","/api/**", "/h2-console/**", "/public/**", "/api/test/public/**").permitAll()
                         .requestMatchers("/user/**").hasRole("USER")
                         .requestMatchers("/admin/**").hasRole("ADMIN")
                         .requestMatchers("/api/data").hasAuthority("READ_DATA")
@@ -122,11 +123,11 @@ public class SecurityConfig {
                             removeCustomCookie(request, response, "myCustomCookie");
                         })
                         .permitAll()
-                )
+//                )
 
                 // 8. HTTPS Enforcement
-                .requiresChannel(channel -> channel
-                        .anyRequest().requiresSecure()
+//                .requiresChannel(channel -> channel
+//                        .anyRequest().requiresSecure()
                 );
 
         return http.build();

@@ -19,6 +19,7 @@ public class UserController {
     }
 
     // Create or Update User
+//    @CrossOrigin()
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
     public User createOrUpdateUser(@RequestBody User user) {
