@@ -2,8 +2,6 @@ package com.example.mediclinic.model;
 
 import jakarta.persistence.*;
 
-
-//@SuperBuilder
 @Entity(name = "permissionEntity")
 @Table(name = "permissions_table")
 public class Permission {

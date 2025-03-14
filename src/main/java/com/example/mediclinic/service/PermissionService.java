@@ -17,4 +17,8 @@ public interface PermissionService {
     List<Permission> findAll();
 
     Optional<Permission> findByPermissionName(String permissionName);
+
+    //.
+
+
 }

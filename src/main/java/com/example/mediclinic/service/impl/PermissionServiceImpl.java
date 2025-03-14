@@ -52,4 +52,5 @@ public class PermissionServiceImpl implements PermissionService {
     public Optional<Permission> findByPermissionName(String permissionName) {
         return permissionRepository.findByPermissionName(permissionName);
     }
+    //.
 }
