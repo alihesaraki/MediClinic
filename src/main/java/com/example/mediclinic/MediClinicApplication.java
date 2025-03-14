@@ -22,6 +22,7 @@ public class MediClinicApplication {
     public static void main(String[] args) {
         SpringApplication.run(MediClinicApplication.class, args);
     }
+
     @Bean
     public CommandLineRunner commandLineRunner() {
         return args -> {
@@ -40,4 +41,5 @@ public class MediClinicApplication {
             System.out.println(appointment2);
             System.out.println("2 Saved");
         };
+    }
 }
