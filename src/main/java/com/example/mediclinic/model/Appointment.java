@@ -21,13 +21,10 @@ public class Appointment {
     @JoinColumn(name = "patient_id", nullable = false)
     private Patient patient;
 
-    @ManyToOne
-    @JoinColumn(name = "doctor_id", nullable = false)
-    private Doctor doctor;
+    @Column(name = "start_time", nullable = false)
+    private LocalDateTime startDateTime;
 
-    @Column(name = "appointment_date", nullable = false)
-    private LocalDateTime date;
+    @Column(name = "end_time", nullable = false)
+    private LocalDateTime endDateTime;
 
-    @Column(name = "appointment_time", nullable = false)
-    private String time;
 }

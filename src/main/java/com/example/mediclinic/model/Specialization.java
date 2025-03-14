@@ -3,6 +3,8 @@ package com.example.mediclinic.model;
 import jakarta.persistence.*;
 import lombok.*;
 
+import java.util.List;
+
 @Entity
 @Getter
 @Setter
@@ -22,4 +24,8 @@ public class Specialization {
 
     @Column(name = "description")
     private String description;
+
+    @ManyToMany
+    @JoinColumn(name = "doctor_id", nullable = false)
+    private List<Doctor> doctor;
 }

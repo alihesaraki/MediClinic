@@ -3,6 +3,8 @@ package com.example.mediclinic.model;
 import jakarta.persistence.*;
 import lombok.*;
 
+import java.util.Set;
+
 @Entity
 @Getter
 @Setter
@@ -31,4 +33,7 @@ public class User {
 
     @Column(name = "last_name")
     private String lastName;
+
+    @ManyToMany
+    private Set<Role> roleSet;
 }
