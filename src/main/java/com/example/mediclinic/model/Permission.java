@@ -42,4 +42,5 @@ public class Permission {
         this.permissionName = permissionName;
         return this;
     }
+    //.
 }

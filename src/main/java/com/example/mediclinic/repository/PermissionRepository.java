@@ -10,4 +10,5 @@ import java.util.Optional;
 public interface PermissionRepository extends JpaRepository<Permission, Long> {
 //    @Query("select p from permissionEntity p where p.permissionName=:permissionName")
     Optional<Permission> findByPermissionName(String permissionName);
+    //.
 }

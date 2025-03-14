@@ -18,7 +18,4 @@ public interface PermissionService {
 
     Optional<Permission> findByPermissionName(String permissionName);
 
-    //.
-
-
 }
