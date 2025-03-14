@@ -17,8 +17,16 @@ public class AppointmentService {
 
     // Save a new Appointment
     public Appointment save(Appointment appointment) {
-        return appointmentRepository.save(appointment);
+        List<Appointment> appointments = appointmentRepository.findByAvailableTime(appointment.getStartDateTime(), appointment.getEndDateTime());
+        System.out.println("Appointments : " + appointments);
+        if(appointments.isEmpty()) {
+            return appointmentRepository.save(appointment);
+        }
+        else{
+            throw new RuntimeException("Appointment already exists");
+        }
     }
+
 
     // Update an existing Appointment
     public Appointment update(Long id, Appointment appointment) {
