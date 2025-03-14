@@ -2,14 +2,15 @@ package com.example.mediclinic.model;
 
 import lombok.*;
 import jakarta.persistence.*;
+import lombok.experimental.SuperBuilder;
 
 @Entity(name = "patientEntity")
 @Getter
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
+@SuperBuilder
 @ToString
-@Builder
 @Table(name = "patients")
 public class Patient {
     @Id
@@ -31,7 +32,7 @@ public class Patient {
     @Column(name = "phone")
     private String phone;
 
-    @ManyToOne
-    @JoinColumn(name = "appointment_id")
-    private Appointment appointment;
+//    @ManyToOne
+//    @JoinColumn(name = "appointment_id")
+//    private Appointment appointment;
 }
