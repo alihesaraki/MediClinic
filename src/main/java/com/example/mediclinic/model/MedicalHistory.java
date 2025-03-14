@@ -16,6 +16,7 @@ public class MedicalHistory {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "medical_id")
     private Long id;
 
     @ManyToOne

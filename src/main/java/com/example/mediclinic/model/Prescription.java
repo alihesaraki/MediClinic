@@ -4,7 +4,7 @@ import lombok.*;
 import jakarta.persistence.*;
 import java.time.LocalDateTime;
 
-@Entity
+@Entity(name = "prescriptionEntity")
 @Getter
 @Setter
 @NoArgsConstructor
@@ -31,4 +31,8 @@ public class Prescription {
 
     @Column(name = "date_issued", nullable = false)
     private LocalDateTime dateIssued;
+
+    @ManyToOne
+    @JoinColumn(name = "medical_id")
+    private MedicalHistory medicalHistory;
 }
