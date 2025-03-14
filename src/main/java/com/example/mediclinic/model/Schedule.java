@@ -19,8 +19,11 @@ public class Schedule {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(name = "date", nullable = false)
-    private LocalDateTime date;
+    @Column(name = "start_time", nullable = false)
+    private LocalDateTime startDateTime;
+
+    @Column(name = "end_time", nullable = false)
+    private LocalDateTime endDateTime;
 
     @ManyToOne
     @JoinColumn(name = "doctor_id", referencedColumnName = "id", nullable = false)
