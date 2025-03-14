@@ -26,6 +26,5 @@ public class Specialization {
     private String description;
 
     @ManyToMany
-    @JoinColumn(name = "doctor_id", nullable = false)
     private List<Doctor> doctor;
 }

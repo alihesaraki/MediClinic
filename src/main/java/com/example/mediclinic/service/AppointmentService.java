@@ -25,9 +25,10 @@ public class AppointmentService {
         return appointmentRepository.findById(id)
                 .map(existingAppointment -> {
                     existingAppointment.setPatient(appointment.getPatient());
-                    existingAppointment.setDoctor(appointment.getDoctor());
-                    existingAppointment.setDate(appointment.getDate());
-                    existingAppointment.setTime(appointment.getTime());
+//                    todo : Error
+//                    existingAppointment.setDoctor(appointment.getDoctor());
+//                    existingAppointment.setDate(appointment.getDate());
+//                    existingAppointment.setTime(appointment.getTime());
                     return appointmentRepository.save(existingAppointment);
                 })
                 .orElseThrow(() -> new RuntimeException("Appointment not found with ID: " + id));

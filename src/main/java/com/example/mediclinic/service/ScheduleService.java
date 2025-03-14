@@ -26,8 +26,9 @@ public class ScheduleService {
         Optional<Schedule> existingSchedule = scheduleRepository.findById(id);
         if (existingSchedule.isPresent()) {
             Schedule updatedSchedule = existingSchedule.get();
-            updatedSchedule.setDate(schedule.getDate());  // Update any other fields here
-            updatedSchedule.setDoctor(schedule.getDoctor());  // Example of updating another field
+//            Todo : Error
+//            updatedSchedule.setDate(schedule.getDate());  // Update any other fields here
+//            updatedSchedule.setDoctor(schedule.getDoctor());  // Example of updating another field
             return scheduleRepository.save(updatedSchedule);
         }
         throw new RuntimeException("Schedule not found with ID: " + id);

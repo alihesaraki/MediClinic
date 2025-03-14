@@ -26,6 +26,5 @@ public class Schedule {
     private LocalDateTime endDateTime;
 
     @ManyToOne
-    @JoinColumn(name = "doctor_id", referencedColumnName = "id", nullable = false)
     private Doctor doctor;  // Assuming there is a Doctor entity
 }
