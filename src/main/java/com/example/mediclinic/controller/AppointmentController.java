@@ -60,10 +60,11 @@ public class AppointmentController {
         return ResponseEntity.ok(appointments);
     }
 
+//    todo : Error
     // Get Appointments by Doctor ID
-    @GetMapping("/doctor/{doctorId}")
-    public ResponseEntity<List<Appointment>> getAppointmentsByDoctorId(@PathVariable Long doctorId) {
-        List<Appointment> appointments = appointmentService.findByDoctorId(doctorId);
-        return ResponseEntity.ok(appointments);
-    }
+//    @GetMapping("/doctor/{doctorId}")
+//    public ResponseEntity<List<Appointment>> getAppointmentsByDoctorId(@PathVariable Long doctorId) {
+//        List<Appointment> appointments = appointmentService.findByDoctorId(doctorId);
+//        return ResponseEntity.ok(appointments);
+//    }
 }

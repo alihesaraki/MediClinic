@@ -56,8 +56,9 @@ public class AppointmentService {
         return appointmentRepository.findByPatientId(patientId);
     }
 
+//    todo : Error
     // Get Appointments by Doctor ID
-    public List<Appointment> findByDoctorId(Long doctorId) {
-        return appointmentRepository.findByDoctorId(doctorId);
-    }
+//    public List<Appointment> findByDoctorId(Long doctorId) {
+//        return appointmentRepository.findByDoctorId(doctorId);
+//    }
 }
