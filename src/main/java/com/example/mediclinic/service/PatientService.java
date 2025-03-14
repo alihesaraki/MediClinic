@@ -26,7 +26,7 @@ public class PatientService {
         Optional<Patient> existingPatient = patientRepository.findById(patient.getId());
         if (existingPatient.isPresent()) {
             Patient updatedPatient = existingPatient.get();
-            updatedPatient.setName(patient.getName());
+            updatedPatient.setFirstName(patient.getFirstName());
             updatedPatient.setAge(patient.getAge());
             updatedPatient.setMedicalHistory(patient.getMedicalHistory());
             updatedPatient.setPhone(patient.getPhone());

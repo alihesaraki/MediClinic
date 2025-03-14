@@ -3,6 +3,7 @@ package com.example.mediclinic.model;
 import lombok.*;
 import jakarta.persistence.*;
 import java.time.LocalDate;
+import java.util.List;
 
 @Entity
 @Getter
@@ -31,4 +32,11 @@ public class MedicalHistory {
 
     @Column(name = "date", nullable = false)
     private LocalDate date;
+
+//    @OneToMany(mappedBy = "medicalHistory", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+//    @Column(name = "prescriptions", nullable = false)
+//    private List<Prescription> prescription;
+//
+//    @
+//    private Appointment appointment;
 }

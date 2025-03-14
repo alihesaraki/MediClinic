@@ -3,6 +3,8 @@ package com.example.mediclinic.model;
 import jakarta.persistence.*;
 import lombok.*;
 
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.Set;
 
 @Entity
@@ -36,4 +38,19 @@ public class User {
 
     @ManyToMany
     private Set<Role> roleSet;
+
+    @Column(name = "accountNonExpired")
+    private boolean accountNonExpired;
+
+    @Column(name = "accountNonLocked")
+    private boolean accountNonLocked;
+
+    @Column(name = "enabled")
+    private boolean enabled;
+
+    @Column(name = "credentialsNonExpired")
+    private boolean credentialsNonExpired;
+
+    @Column(name = "credentialsExpiryDate" , nullable = true)
+    private LocalDateTime credentialsExpiryDate;
 }
