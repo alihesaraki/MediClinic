@@ -1,38 +1,48 @@
 package com.example.mediclinic.model;
 
-import lombok.*;
+import com.fasterxml.jackson.annotation.JsonIdentityInfo;
+import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import jakarta.persistence.*;
+import lombok.*;
 import lombok.experimental.SuperBuilder;
+import org.hibernate.annotations.SQLRestriction;
 
-@Entity(name = "patientEntity")
+import java.util.ArrayList;
+import java.util.List;
+
 @Getter
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
 @SuperBuilder
-@ToString
+//@ToString
+
+@Cacheable
+@Entity(name = "patientEntity")
 @Table(name = "patients")
+@JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "patientId")
+@SQLRestriction("deleted = false")
 public class Patient {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    @Column(name = "patientId")
+    private Long patientId;
 
-    @Column(name = "firstName", nullable = false)
+    @Column(name = "firstName")
     private String firstName;
 
-    @Column(name = "lastName", nullable = false)
+    @Column(name = "lastName")
     private String lastName;
 
-    @Column(name = "age", nullable = false)
+    @Column(name = "age")
     private int age;
-
-    @Column(name = "medical_history")
-    private String medicalHistory;
 
     @Column(name = "phone")
     private String phone;
 
-//    @ManyToOne
-//    @JoinColumn(name = "appointment_id")
-//    private Appointment appointment;
+    @Column(name = "deleted")
+    private boolean deleted = false;
+
+    @OneToMany(mappedBy = "patient", fetch = FetchType.EAGER)
+    private List<Appointment> appointments = new ArrayList<>();
 }

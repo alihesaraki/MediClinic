@@ -1,53 +1,83 @@
 package com.example.mediclinic.service;
 
 import com.example.mediclinic.model.Prescription;
+import com.example.mediclinic.repository.MedicalHistoryRepository;
 import com.example.mediclinic.repository.PrescriptionRepository;
+import jakarta.annotation.PostConstruct;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDate;
 import java.util.List;
-import java.util.Optional;
 
 @Service
+@Slf4j
 public class PrescriptionService {
 
     private final PrescriptionRepository prescriptionRepository;
+    private final MedicalHistoryRepository medicalHistoryRepository;
 
-    public PrescriptionService(PrescriptionRepository prescriptionRepository) {
+    public PrescriptionService(PrescriptionRepository prescriptionRepository, MedicalHistoryRepository medicalHistoryRepository) {
         this.prescriptionRepository = prescriptionRepository;
+        this.medicalHistoryRepository = medicalHistoryRepository;
     }
 
-    // Save a new Prescription or Update an existing one
+    @PostConstruct
+    public void init() {
+        log.info("Cache init...");
+        final List<Prescription> departments = prescriptionRepository.findAll();
+        log.info("Cache initialized...!!");
+    }
+
+    @Transactional
+    @CacheEvict(cacheNames = "prescriptions", allEntries = true)
     public Prescription save(Prescription prescription) {
         return prescriptionRepository.save(prescription);
     }
 
-    // Update an existing Prescription
+    @Transactional
+    @CacheEvict(cacheNames = "prescriptions", allEntries = true)
     public Prescription update(Prescription prescription) {
-        Optional<Prescription> existingPrescription = prescriptionRepository.findById(prescription.getId());
-        if (existingPrescription.isPresent()) {
-            Prescription updatedPrescription = existingPrescription.get();
-//            updatedPrescription.setMedicine(prescription.getMedicine());
-            updatedPrescription.setDosage(prescription.getDosage());
-//            updatedPrescription.setPatient(prescription.getPatient());
-            updatedPrescription.setDateTimeIssued(prescription.getDateTimeIssued());
-            return prescriptionRepository.save(updatedPrescription);
-        }
-        throw new RuntimeException("Prescription not found with ID: " + prescription.getId());
+        return prescriptionRepository.save(prescription);
     }
 
-    // Delete Prescription by ID
-    public void delete(Long id) {
-        prescriptionRepository.deleteById(id);
+    @Transactional
+    @CacheEvict(cacheNames = "prescriptions", allEntries = true)
+    public void logicalRemove(Long id) {
+        prescriptionRepository.logicalRemove(id);
     }
 
-    // Get all Prescriptions
+    @Transactional
+    @CacheEvict(cacheNames = "prescriptions", allEntries = true)
     public List<Prescription> findAll() {
         return prescriptionRepository.findAll();
     }
 
-    // Get Prescription by ID
+    @Transactional
+    @CacheEvict(cacheNames = "prescriptions", allEntries = true)
     public Prescription findById(Long id) {
         return prescriptionRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Prescription not found with ID: " + id));
     }
+
+    @Transactional
+    @CacheEvict(cacheNames = "prescriptions", allEntries = true)
+    public List<Prescription> findByMedicalHistory(Long id) {
+        return prescriptionRepository.findByMedicalHistory(id);
+    }
+
+    @Transactional
+    @CacheEvict(cacheNames = "prescriptions", allEntries = true)
+    public List<Prescription> findByMedicineId(Long id) {
+        return prescriptionRepository.findByMedicineId(id);
+    }
+
+    @Transactional
+    @CacheEvict(cacheNames = "prescriptions", allEntries = true)
+    public List<Prescription> findPrescriptionInDateRange(LocalDate startDate, LocalDate endDate) {
+        return prescriptionRepository.findPrescriptionInDateRange(startDate, endDate);
+    }
+
 }
