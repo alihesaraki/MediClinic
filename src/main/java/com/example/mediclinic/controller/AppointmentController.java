@@ -2,14 +2,15 @@ package com.example.mediclinic.controller;
 
 import com.example.mediclinic.model.Appointment;
 import com.example.mediclinic.service.AppointmentService;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 @RestController
 @RequestMapping("/api/appointments")
+@CrossOrigin(origins = "*")
 public class AppointmentController {
 
     private final AppointmentService appointmentService;
@@ -18,53 +19,46 @@ public class AppointmentController {
         this.appointmentService = appointmentService;
     }
 
-    // Create Appointment
-    @PostMapping
-    @ResponseStatus(HttpStatus.CREATED)
-    public Appointment createAppointment(@RequestBody Appointment appointment) {
-        return appointmentService.save(appointment);
-    }
-
-    // Update Appointment by ID
-    @PutMapping("/{id}")
-    public ResponseEntity<Appointment> updateAppointment(@PathVariable Long id, @RequestBody Appointment appointment) {
-        Appointment updatedAppointment = appointmentService.update(id, appointment);
-        return ResponseEntity.ok(updatedAppointment);
-    }
-
-    // Delete Appointment by ID
-    @DeleteMapping("/{id}")
-    @ResponseStatus(HttpStatus.NO_CONTENT)
-    public void deleteAppointment(@PathVariable Long id) {
-        appointmentService.delete(id);
-    }
-
-    // Get All Appointments
     @GetMapping
     public ResponseEntity<List<Appointment>> getAllAppointments() {
-        List<Appointment> appointments = appointmentService.findAll();
-        return ResponseEntity.ok(appointments);
+        return ResponseEntity.ok(appointmentService.getAllAppointments());
     }
 
-    // Get Appointment by ID
     @GetMapping("/{id}")
     public ResponseEntity<Appointment> getAppointmentById(@PathVariable Long id) {
-        Appointment appointment = appointmentService.findById(id);
-        return ResponseEntity.ok(appointment);
+        return appointmentService.getAppointmentById(id)
+                .map(ResponseEntity::ok)
+                .orElse(ResponseEntity.notFound().build());
     }
 
-    // Get Appointments by Patient ID
-    @GetMapping("/patient/{patientId}")
+    @PostMapping
+    public ResponseEntity<Appointment> createAppointment(@RequestBody Appointment appointment) {
+        return ResponseEntity.ok(appointmentService.createAppointment(appointment));
+    }
+
+    @PutMapping("/{id}")
+    public ResponseEntity<Appointment> updateAppointment(@PathVariable Long id, @RequestBody Appointment appointment) {
+        return ResponseEntity.ok(appointmentService.updateAppointment(id, appointment));
+    }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Void> deleteAppointment(@PathVariable Long id) {
+        appointmentService.deleteAppointment(id);
+        return ResponseEntity.noContent().build();
+    }
+
+    @GetMapping("/by-patient/{patientId}")
     public ResponseEntity<List<Appointment>> getAppointmentsByPatientId(@PathVariable Long patientId) {
-        List<Appointment> appointments = appointmentService.findByPatientId(patientId);
-        return ResponseEntity.ok(appointments);
+        return ResponseEntity.ok(appointmentService.getAppointmentsByPatientId(patientId));
     }
 
-//    todo : Error
-    // Get Appointments by Doctor ID
-//    @GetMapping("/doctor/{doctorId}")
-//    public ResponseEntity<List<Appointment>> getAppointmentsByDoctorId(@PathVariable Long doctorId) {
-//        List<Appointment> appointments = appointmentService.findByDoctorId(doctorId);
-//        return ResponseEntity.ok(appointments);
-//    }
+    @GetMapping("/range")
+    public ResponseEntity<List<Appointment>> getAppointmentsInRange(
+            @RequestParam("start") String start,
+            @RequestParam("end") String end
+    ) {
+        LocalDateTime startTime = LocalDateTime.parse(start);
+        LocalDateTime endTime = LocalDateTime.parse(end);
+        return ResponseEntity.ok(appointmentService.getAppointmentsInRange(startTime, endTime));
+    }
 }

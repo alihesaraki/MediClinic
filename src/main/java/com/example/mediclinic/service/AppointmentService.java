@@ -4,7 +4,9 @@ import com.example.mediclinic.model.Appointment;
 import com.example.mediclinic.repository.AppointmentRepository;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class AppointmentService {
@@ -15,58 +17,45 @@ public class AppointmentService {
         this.appointmentRepository = appointmentRepository;
     }
 
-    // Save a new Appointment
-    public Appointment save(Appointment appointment) {
-        List<Appointment> appointments = appointmentRepository.findByAvailableTime(appointment.getStartDateTime(), appointment.getEndDateTime());
-        System.out.println("Appointments : " + appointments);
-        if(appointments.isEmpty()) {
-            return appointmentRepository.save(appointment);
-        }
-        else{
-            throw new RuntimeException("Appointment already exists");
-        }
-    }
-
-
-    // Update an existing Appointment
-    public Appointment update(Long id, Appointment appointment) {
-        return appointmentRepository.findById(id)
-                .map(existingAppointment -> {
-                    existingAppointment.setPatient(appointment.getPatient());
-//                    todo : Error
-//                    existingAppointment.setDoctor(appointment.getDoctor());
-//                    existingAppointment.setDate(appointment.getDate());
-//                    existingAppointment.setTime(appointment.getTime());
-                    return appointmentRepository.save(existingAppointment);
-                })
-                .orElseThrow(() -> new RuntimeException("Appointment not found with ID: " + id));
-    }
-
-
-    // Delete an Appointment
-    public void delete(Long id) {
-        appointmentRepository.deleteById(id);
-    }
-
-    // Get all Appointments
-    public List<Appointment> findAll() {
+    // Get all appointments
+    public List<Appointment> getAllAppointments() {
         return appointmentRepository.findAll();
     }
 
-    // Get Appointment by ID
-    public Appointment findById(Long id) {
+    // Get appointment by ID
+    public Optional<Appointment> getAppointmentById(Long id) {
+        return appointmentRepository.findById(id);
+    }
+
+    // Create a new appointment
+    public Appointment createAppointment(Appointment appointment) {
+        return appointmentRepository.save(appointment);
+    }
+
+    // Update an existing appointment
+    public Appointment updateAppointment(Long id, Appointment updatedAppointment) {
         return appointmentRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Appointment not found with ID: " + id));
+                .map(existingAppointment -> {
+                    existingAppointment.setStartDateTime(updatedAppointment.getStartDateTime());
+                    existingAppointment.setEndDateTime(updatedAppointment.getEndDateTime());
+                    existingAppointment.setPatient(updatedAppointment.getPatient());
+                    return appointmentRepository.save(existingAppointment);
+                })
+                .orElseThrow(() -> new RuntimeException("Appointment not found with id: " + id));
     }
 
-    // Get Appointments by Patient ID
-    public List<Appointment> findByPatientId(Long patientId) {
-        return appointmentRepository.findByPatientId(patientId);
+    // Delete an appointment by ID
+    public void deleteAppointment(Long id) {
+        appointmentRepository.deleteById(id);
     }
 
-//    todo : Error
-    // Get Appointments by Doctor ID
-//    public List<Appointment> findByDoctorId(Long doctorId) {
-//        return appointmentRepository.findByDoctorId(doctorId);
-//    }
+    // Get appointments by patient ID
+    public List<Appointment> getAppointmentsByPatientId(Long patientId) {
+        return appointmentRepository.findByPatientPatientId(patientId);
+    }
+
+    // Get appointments in a time range
+    public List<Appointment> getAppointmentsInRange(LocalDateTime start, LocalDateTime end) {
+        return appointmentRepository.findByStartDateTimeBetween(start, end);
+    }
 }

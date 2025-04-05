@@ -2,71 +2,52 @@ package com.example.mediclinic.service;
 
 import com.example.mediclinic.model.Patient;
 import com.example.mediclinic.repository.PatientRepository;
-import jakarta.annotation.PostConstruct;
-import lombok.extern.slf4j.Slf4j;
-import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
+
 import java.util.List;
+import java.util.Optional;
 
 @Service
-@Slf4j
 public class PatientService {
-    private final PatientRepository patientRepository;
 
+    private final PatientRepository patientRepository;
 
     public PatientService(PatientRepository patientRepository) {
         this.patientRepository = patientRepository;
     }
 
-    @PostConstruct
-    public void init() {
-        log.info("Cache init...");
-        final List<Patient> patients = patientRepository.findAll();
-        log.info("Cache initialized In PatientService...!!");
+    public List<Patient> getAllPatients() {
+        return patientRepository.findByDeletedFalse();
     }
 
+    public Optional<Patient> getPatientById(Long id) {
+        return patientRepository.findById(id);
+    }
 
-    @Transactional
-    @CacheEvict(cacheNames = "patients", allEntries = true)
-    public Patient save(Patient patient) {
+    public Patient createPatient(Patient patient) {
         return patientRepository.save(patient);
     }
 
-    @Transactional
-    @CacheEvict(cacheNames = "patients", allEntries = true)
-    public Patient update(Patient patient) {
-        return patientRepository.save(patient);
-    }
-
-    @Transactional
-    @CacheEvict(cacheNames = "patients", allEntries = true)
-    public void logicalRemove(Long patientId) {
-        patientRepository.logicalRemove(patientId);
-    }
-
-    @Transactional
-    @CacheEvict(cacheNames = "patients", allEntries = true)
-    public List<Patient> findAll() {
-        return patientRepository.findAll();
-    }
-
-    @Transactional
-    @CacheEvict(cacheNames = "patients", allEntries = true)
-    public Patient findById(Long id) {
+    public Patient updatePatient(Long id, Patient updatedPatient) {
         return patientRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Patient not found with ID: " + id));
+                .map(existing -> {
+                    existing.setFirstName(updatedPatient.getFirstName());
+                    existing.setLastName(updatedPatient.getLastName());
+                    existing.setAge(updatedPatient.getAge());
+                    existing.setPhone(updatedPatient.getPhone());
+                    return patientRepository.save(existing);
+                })
+                .orElseThrow(() -> new RuntimeException("Patient not found with id: " + id));
     }
 
-    @Transactional
-    @CacheEvict(cacheNames = "patients", allEntries = true)
-    public List<Patient> findByLastName(String lastName) {
-        return patientRepository.findByLastName(lastName);
+    public void deletePatient(Long id) {
+        patientRepository.findById(id).ifPresent(patient -> {
+            patient.setDeleted(true); // Soft delete
+            patientRepository.save(patient);
+        });
     }
 
-    @Transactional
-    @CacheEvict(cacheNames = "patients", allEntries = true)
-    public List<Patient> findByAppointment(Long id) {
-        return patientRepository.findByAppointment(id);
+    public List<Patient> searchByLastName(String lastName) {
+        return patientRepository.findByLastNameContainingIgnoreCase(lastName);
     }
 }

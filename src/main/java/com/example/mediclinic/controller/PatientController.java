@@ -1,18 +1,15 @@
 package com.example.mediclinic.controller;
 
-
 import com.example.mediclinic.model.Patient;
 import com.example.mediclinic.service.PatientService;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.access.annotation.Secured;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.Collections;
 import java.util.List;
 
 @RestController
 @RequestMapping("/api/patients")
+@CrossOrigin(origins = "*")
 public class PatientController {
 
     private final PatientService patientService;
@@ -21,49 +18,36 @@ public class PatientController {
         this.patientService = patientService;
     }
 
-    @PostMapping("/save")
-    @ResponseStatus(HttpStatus.CREATED)
-    public ResponseEntity<Patient> createPatient(@RequestBody Patient patient) {
-        patientService.save(patient);
-        return ResponseEntity.status(HttpStatus.OK).body(patient);
-
-    }
-
-    @PutMapping("/update")
-    public ResponseEntity<Patient> updatePatient(@RequestBody Patient patient) {
-        patientService.update(patient);
-        return ResponseEntity.status(HttpStatus.OK).body(patient);
-    }
-
-    @DeleteMapping("/{patientId}")
-    @Secured("ROLE_ADMIN")
-    public void deletePatient(@PathVariable Long patientId) {
-        patientService.logicalRemove(patientId);
-    }
-
     @GetMapping
-    @Secured("ROLE_ADMIN")
     public ResponseEntity<List<Patient>> getAllPatients() {
-        return ResponseEntity.ok(patientService.findAll());
+        return ResponseEntity.ok(patientService.getAllPatients());
     }
 
-    @GetMapping("/patientId/{patientId}")
-    @Secured("ROLE_ADMIN")
-    public ResponseEntity<Patient> getPatientById(@PathVariable Long patientId) {
-        Patient patient = patientService.findById(patientId);
-        return ResponseEntity.status(HttpStatus.OK).body(patient);
+    @GetMapping("/{id}")
+    public ResponseEntity<Patient> getPatientById(@PathVariable Long id) {
+        return patientService.getPatientById(id)
+                .map(ResponseEntity::ok)
+                .orElse(ResponseEntity.notFound().build());
     }
 
-    @GetMapping("/lastName/{lastName}")
-    @Secured("ROLE_ADMIN")
-    public ResponseEntity<List<Patient>> getPatientByLastName(@PathVariable String lastName) {
-        return ResponseEntity.ok(patientService.findByLastName(lastName));
+    @PostMapping
+    public ResponseEntity<Patient> createPatient(@RequestBody Patient patient) {
+        return ResponseEntity.ok(patientService.createPatient(patient));
     }
 
-    @GetMapping("/appointmentId/{id}")
-    @Secured("ROLE_ADMIN")
-    public ResponseEntity<List<Patient>> getPatientByAppointmentId(@PathVariable Long id) {
-        List<Patient> patientAppoint = patientService.findByAppointment(id);
-        return ResponseEntity.ok(Collections.singletonList(patientAppoint.get(0)));
+    @PutMapping("/{id}")
+    public ResponseEntity<Patient> updatePatient(@PathVariable Long id, @RequestBody Patient patient) {
+        return ResponseEntity.ok(patientService.updatePatient(id, patient));
+    }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Void> deletePatient(@PathVariable Long id) {
+        patientService.deletePatient(id);
+        return ResponseEntity.noContent().build();
+    }
+
+    @GetMapping("/search")
+    public ResponseEntity<List<Patient>> searchByLastName(@RequestParam String lastName) {
+        return ResponseEntity.ok(patientService.searchByLastName(lastName));
     }
 }

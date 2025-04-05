@@ -15,23 +15,22 @@ import java.util.List;
 @NoArgsConstructor
 @AllArgsConstructor
 @SuperBuilder
-//@ToString
-
 @Cacheable
 @Entity(name = "patientEntity")
 @Table(name = "patients")
 @JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "patientId")
 @SQLRestriction("deleted = false")
 public class Patient {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "patientId")
+    @Column(name = "patient_id")
     private Long patientId;
 
-    @Column(name = "firstName")
+    @Column(name = "first_name")
     private String firstName;
 
-    @Column(name = "lastName")
+    @Column(name = "last_name")
     private String lastName;
 
     @Column(name = "age")
