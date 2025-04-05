@@ -54,4 +54,5 @@ public class MediClinicApplication {
             System.out.println("Appointment 2 Saved: " + appointment2);
         };
     }
+
 }
