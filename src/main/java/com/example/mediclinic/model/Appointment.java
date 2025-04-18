@@ -2,6 +2,7 @@ package com.example.mediclinic.model;
 
 import lombok.*;
 import jakarta.persistence.*;
+import lombok.experimental.SuperBuilder;
 
 import java.time.LocalDateTime;
 
@@ -10,6 +11,7 @@ import java.time.LocalDateTime;
 @AllArgsConstructor
 @NoArgsConstructor
 @ToString
+@SuperBuilder
 @Entity(name = "appointmentEntity")
 @Table(name = "appointments")
 public class Appointment {
@@ -28,4 +30,9 @@ public class Appointment {
     @ManyToOne
     @JoinColumn(name = "patient_id", nullable = false)
     private Patient patient;
+
+    @ManyToOne
+    @JoinColumn(name = "schedule_id", nullable = false)
+    private Schedule schedule;
+
 }

@@ -25,6 +25,10 @@ public class Schedule {
     @Column(name = "end_time", nullable = false)
     private LocalDateTime endDateTime;
 
+    @Column(name = "appointment-length", nullable = false)
+    private int appointmentDurationMin;
+
     @ManyToOne
-    private Doctor doctor;  // Assuming there is a Doctor entity
+    @JoinColumn(name = "doctor", nullable = false)
+    private Doctor doctor;
 }
