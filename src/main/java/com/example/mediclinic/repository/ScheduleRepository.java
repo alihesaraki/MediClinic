@@ -8,7 +8,7 @@ import java.util.List;
 import java.util.Optional;
 
 public interface ScheduleRepository extends JpaRepository<Schedule, Long> {
-
+// todo : schedule can be in two days
     Optional<Schedule> findByDoctorIdAndStartDateTimeLessThanEqualAndEndDateTimeGreaterThanEqual
             (Long doctorId, LocalDateTime startDateTime, LocalDateTime endDateTime );
 

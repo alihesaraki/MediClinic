@@ -2,6 +2,7 @@ package com.example.mediclinic.model;
 
 import lombok.*;
 import jakarta.persistence.*;
+import org.hibernate.annotations.processing.Pattern;
 
 @Entity
 @Getter
@@ -12,7 +13,6 @@ import jakarta.persistence.*;
 @Builder
 @Table(name = "doctors")
 public class Doctor {
-
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;

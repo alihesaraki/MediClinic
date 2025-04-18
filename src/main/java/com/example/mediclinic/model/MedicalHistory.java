@@ -33,10 +33,13 @@ public class MedicalHistory {
     @Column(name = "date", nullable = false)
     private LocalDate date;
 
-//    @OneToMany(mappedBy = "medicalHistory", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
-//    @Column(name = "prescriptions", nullable = false)
-//    private List<Prescription> prescription;
-//
-//    @
-//    private Appointment appointment;
+    @OneToMany(mappedBy = "medicalHistory", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    @Column(name = "prescriptions", nullable = false)
+    private List<Prescription> prescription;
+
+    @ManyToOne
+    private Appointment appointment;
+
+//    todo : لیست نسخه ها ... لیست آزمایش ... لیست گزارش
+//    todo : تصویر ... سوابق اسکن شده mongo db
 }

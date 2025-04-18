@@ -31,7 +31,7 @@ public interface AppointmentRepository extends JpaRepository<Appointment, Long> 
             @Param("startTime") LocalDateTime startTime
     );
 
-//    @Query("select a from appointmentEntity a where startTime between a.startDateTime and a.endDateTime or endTime between a.startDateTime and a.endDateTime" )
-//    List<Appointment> findByAvailableTime(@Param("startTime") LocalDateTime startTime,@Param("endTime") LocalDateTime endTime);
+    @Query("select a from appointmentEntity a where :startTime between a.startDateTime and a.endDateTime or :endTime between a.startDateTime and a.endDateTime" )
+    List<Appointment> findByAvailableTime(@Param("startTime") LocalDateTime startTime,@Param("endTime") LocalDateTime endTime);
 
 }

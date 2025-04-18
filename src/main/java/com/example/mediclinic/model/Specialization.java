@@ -25,6 +25,6 @@ public class Specialization {
     @Column(name = "description")
     private String description;
 
-    @ManyToMany
-    private List<Doctor> doctor;
+    @OneToMany(mappedBy = "specialization")
+    private List<Doctor> doctorList;
 }

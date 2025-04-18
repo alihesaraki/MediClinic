@@ -3,7 +3,6 @@ package com.example.mediclinic.model;
 import jakarta.persistence.*;
 import lombok.*;
 
-import java.util.List;
 import java.util.Set;
 
 @Entity
@@ -24,5 +23,6 @@ public class Role {
     private String name;
 
     @ManyToMany
-    private Set<Permission> permissions;
+//    todo join colum, join table, foreign key annotation
+    private Set<Permission> permissionSet;
 }

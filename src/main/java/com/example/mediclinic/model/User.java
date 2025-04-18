@@ -53,4 +53,9 @@ public class User {
 
     @Column(name = "credentialsExpiryDate" , nullable = true)
     private LocalDateTime credentialsExpiryDate;
+
+//    @PrePersist
+//    public void prePersist() {
+//        todo bcrypt password
+//    }
 }
